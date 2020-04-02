@@ -4,9 +4,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-  // mode: "development",
+  mode: "production",
   entry: {
-    app: './src/index.js',
+    app: './src/index.js'
     // print: './src/print.js'
   },
   devtool: 'inline-source-map',
@@ -36,7 +36,7 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: ['file-loader']
-      }
+      },
     ]
   }
 };
