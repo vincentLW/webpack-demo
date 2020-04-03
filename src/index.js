@@ -2,6 +2,7 @@ import './style.css';
 import Icon from './icon.jpg';
 import printMe from './print';
 import { cube } from './math';
+import _ from 'lodash';
 
 function component() {
   var element = document.createElement('pre');
@@ -12,6 +13,10 @@ function component() {
     'Hello webpack1111',
     '5 cubed is equal to ' + cube(5)
   ].join('\n\n');
+
+  console.log(_.join(['Another', 'module', 'loaded!'], ' '));
+
+  
   element.classList.add('hello');
   var myIcon = new Image();
   myIcon.src = Icon;
