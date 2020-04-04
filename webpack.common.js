@@ -13,8 +13,7 @@ module.exports = {
     })
   ],
   output: {
-    filename: "[name].bundle.js",
-    chunkFilename: "[name].bundle.js",
+    filename: "[name].[chunkhash].js",
     path: path.resolve(__dirname, "dist")
   }
   //添加module解析后不能用 需要摸底
