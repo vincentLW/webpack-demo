@@ -1,42 +1,19 @@
-import './style.css';
-import Icon from './icon.jpg';
-import printMe from './print';
-import { cube } from './math';
-import _ from 'lodash';
+// import "./style.css";
 
-function component() {
-  var element = document.createElement('pre');
-  var btn = document.createElement('button');
+function getComponent() {
 
-  // Lodash（目前通过一个 script 脚本引入）对于执行这一行是必需的
-  element.innerHTML = [
-    'Hello webpack1111',
-    '5 cubed is equal to ' + cube(5)
-  ].join('\n\n');
-
-  console.log(_.join(['Another', 'module', 'loaded!'], ' '));
-
-  
-  element.classList.add('hello');
-  var myIcon = new Image();
-  myIcon.src = Icon;
-  btn.innerHTML = 'Click me and check the console ssswwwwsssswwww111111';
-
-  btn.onclick = printMe;
-
-  element.appendChild(btn);
-  element.appendChild(myIcon);
-
-  return element;
+  return import(
+    /*webpackChunkName:"lodash"*/
+    "lodash"
+  )
+    .then(_ => {
+      var element = document.createElement("div");
+      element.innerHTML = _.join(["hello", "webpack"], " ");
+      return element;
+    })
+    .catch(error => "An error occurred while loading the component");
 }
-let element = component();
-document.body.appendChild(element);
 
-if (module.hot) {
-  module.hot.accept('./print.js', function() {
-    console.log('Accepting the updated printMe module!');
-    document.body.removeChild(element);
-    element = component();
-    document.body.appendChild(element);
-  });
-}
+getComponent().then(component => {
+  document.body.appendChild(component);
+});
