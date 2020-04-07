@@ -1,5 +1,5 @@
 import _ from "lodash";
-import print from "../print";
+import print from "../../print";
 
 function component() {
   var element = document.createElement("div");
@@ -18,3 +18,7 @@ function component() {
 }
 
 document.body.appendChild(component());
+
+$(function(){
+  $('.home').text('xxxx');
+})

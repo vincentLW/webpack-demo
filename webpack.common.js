@@ -5,13 +5,14 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {
-    'js/index': "./src/test/index.js"
+    'html/testPage/index': "./src/html/testPage/index.js"
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: "Production",
-      filename:'html/index.html'
+      filename:'html/testPage/test.html',
+      template:"./src/html/testPage/test.html"
     }),
   ],
   output: {
