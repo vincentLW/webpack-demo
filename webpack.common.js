@@ -1,6 +1,7 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const glob = require("glob");
 
 const javascripts = glob.sync("public/**/*.js");
@@ -16,6 +17,7 @@ javascripts.forEach(function (item) {
 });
 
 plugins.push(new CleanWebpackPlugin());
+plugins.push(new CopyWebpackPlugin([{ from: 'public/imgs', to: 'imgs' },]))
 htmls.forEach(function (item, index) {
   const chuckName = files[index];
   console.log("chuckName", chuckName);

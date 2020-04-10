@@ -19,17 +19,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //开发环境使用
-// const webpackDevMiddleware = require('webpack-dev-middleware');
-// const webpack = require('webpack');
-// const config = require('./webpack.common.js');
-// const compiler = webpack(config);
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
+const config = require('./webpack.common.js');
+const compiler = webpack(config);
 
-// app.use(webpackDevMiddleware(compiler, {
-//   publicPath: config.output.publicPath
-// }));
+app.use(webpackDevMiddleware(compiler, {
+  publicPath: config.output.publicPath
+}));
 
 /* 生产环境使用 */
-app.use(express.static(path.join(__dirname, 'dist')));
+// app.use(express.static(path.join(__dirname, 'dist')));
 
 
 app.use('/', indexRouter);
