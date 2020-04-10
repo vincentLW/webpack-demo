@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+
 const indexRouter= require('./routes/index');
 
 
@@ -16,7 +17,20 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'dist')));
+
+//开发环境使用
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
+const config = require('./webpack.common.js');
+const compiler = webpack(config);
+
+app.use(webpackDevMiddleware(compiler, {
+  publicPath: config.output.publicPath
+}));
+
+/* 生产环境使用 */
+// app.use(express.static(path.join(__dirname, 'dist')));
+
 
 app.use('/', indexRouter);
 
