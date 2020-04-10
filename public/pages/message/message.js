@@ -5,4 +5,3 @@ import "./message.scss";
 $(function () {
   render();
 });
-console.log("xxx");
