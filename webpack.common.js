@@ -1,7 +1,7 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const glob = require("glob");
 
 const javascripts = glob.sync("public/**/*.js");
@@ -9,23 +9,39 @@ const htmls = glob.sync("public/**/*.html");
 let entries = {};
 let plugins = [];
 const files = [];
-javascripts.forEach(function (item) {
-  const lastHashIndex = item.lastIndexOf(".");
-  const filePath = "./" + item.slice(0, lastHashIndex).replace("public/", "");
-  files.push(filePath);
-  entries[filePath] = "./" + item;
-});
 
+// 排除i18n和commmon的js
+javascripts
+  .filter(function (item) {
+    return !(item.includes("i18n") || item.includes("common"));
+  })
+  .forEach(function (item) {
+    //添加相对路径不然无法识别
+    const filePath = './'+item;
+    const lastHashIndex = filePath.lastIndexOf(".");
+    // key值需要去掉相对路径
+    const desFilePath = filePath.slice(0, lastHashIndex).replace('./public/','');
+    entries[desFilePath] = filePath;
+    files.push(desFilePath);
+  });
+
+/* 添加插件 */
 plugins.push(new CleanWebpackPlugin());
-plugins.push(new CopyWebpackPlugin([{ from: 'public/imgs', to: 'imgs' },]))
+plugins.push(
+  new CopyWebpackPlugin([
+    { from: "public/imgs", to: "imgs" },
+    { from: "public/i18n/locals", to: "i18n/locals" },
+  ])
+);
+
+// 遍历html文件
 htmls.forEach(function (item, index) {
   const chuckName = files[index];
-  console.log("chuckName", chuckName);
 
   plugins.push(
     new HtmlWebpackPlugin({
-      filename: "./" + item.replace("public/", ""),
-      template: "./" + item,
+      filename: item.replace("public/", ""),
+      template: path.resolve(__dirname, item),
       chunks: [chuckName],
     })
   );
@@ -35,7 +51,7 @@ module.exports = {
   entry: entries,
   plugins: plugins,
   output: {
-    filename: "[name].[chunkhash].js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
   },
