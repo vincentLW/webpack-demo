@@ -17,10 +17,12 @@ javascripts
   })
   .forEach(function (item) {
     //添加相对路径不然无法识别
-    const filePath = './'+item;
+    const filePath = "./" + item;
     const lastHashIndex = filePath.lastIndexOf(".");
     // key值需要去掉相对路径
-    const desFilePath = filePath.slice(0, lastHashIndex).replace('./public/','');
+    const desFilePath = filePath
+      .slice(0, lastHashIndex)
+      .replace("./public/", "");
     entries[desFilePath] = filePath;
     files.push(desFilePath);
   });
@@ -28,10 +30,7 @@ javascripts
 /* 添加插件 */
 plugins.push(new CleanWebpackPlugin());
 plugins.push(
-  new CopyWebpackPlugin([
-    { from: "public/imgs", to: "imgs" },
-    { from: "public/i18n/locals", to: "i18n/locals" },
-  ])
+  new CopyWebpackPlugin([{ from: "public/i18n/locals", to: "i18n/locals" }])
 );
 
 // 遍历html文件
@@ -48,6 +47,7 @@ htmls.forEach(function (item, index) {
 });
 
 module.exports = {
+  mode: "development",
   entry: entries,
   plugins: plugins,
   output: {
@@ -88,6 +88,24 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: ["file-loader"],
+      },
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: "html-loader",
+          options: {
+            minimize: true,
+            attributes: {
+              list: [
+                {
+                  tag: "img",
+                  attribute: "src",
+                  type: "src",
+                },
+              ],
+            },
+          },
+        },
       },
     ],
   },
